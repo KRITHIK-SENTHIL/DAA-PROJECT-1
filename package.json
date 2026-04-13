@@ -1,0 +1,14 @@
+{
+  "name": "prism-search-lab",
+  "version": "1.0.0",
+  "description": "A colorful full-stack pathfinding studio for BFS, DFS, and A* in Design and Analysis of Algorithms.",
+  "main": "server.js",
+  "engines": {
+    "node": ">=22 <25"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "license": "MIT"
+}

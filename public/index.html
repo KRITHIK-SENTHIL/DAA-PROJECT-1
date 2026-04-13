@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Prism Search Lab | BFS, DFS, and A*</title>
+    <meta
+      name="description"
+      content="A full-stack, colorful graph-search studio for BFS, DFS, and A* in Design and Analysis of Algorithms."
+    />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="background-orb orb-a"></div>
+    <div class="background-orb orb-b"></div>
+    <div class="background-grid"></div>
+
+    <div class="site-shell">
+      <header class="hero">
+        <nav class="topbar">
+          <div class="brand-lockup">
+            <span class="brand-icon">P</span>
+            <div>
+              <p class="brand-overline">DAA Pathfinder Studio</p>
+              <h1>Prism Search Lab</h1>
+            </div>
+          </div>
+          <button id="heroChallengeBtn" class="button ghost-button" type="button">
+            Preview Challenge
+          </button>
+        </nav>
+
+        <div class="hero-layout">
+          <section class="hero-copy">
+            <p class="eyebrow">Graph Search, redesigned</p>
+            <h2>Make BFS, DFS, and A* feel like a live neon performance.</h2>
+            <p class="hero-text">
+              Paint walls, move the start and goal, keep the same maze, and watch
+              three search strategies reveal completely different personalities on
+              the exact same board.
+            </p>
+
+            <div class="hero-metrics">
+              <article class="metric-pill">
+                <span class="metric-label">BFS</span>
+                <strong>Shortest Path</strong>
+              </article>
+              <article class="metric-pill">
+                <span class="metric-label">DFS</span>
+                <strong>Deep Branches</strong>
+              </article>
+              <article class="metric-pill">
+                <span class="metric-label">A*</span>
+                <strong>Heuristic Guided</strong>
+              </article>
+            </div>
+          </section>
+
+          <aside class="hero-stage">
+            <div class="signal-card glow-card">
+              <p class="card-kicker">Search Personalities</p>
+              <h3>One maze. Three algorithms. Three very different frontier stories.</h3>
+              <div class="signal-strip">
+                <span class="signal-chip sunrise">BFS</span>
+                <span class="signal-chip lagoon">DFS</span>
+                <span class="signal-chip comet">A*</span>
+              </div>
+              <div class="trail-demo">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+            </div>
+            <div class="floating-note">
+              <span>Backend traces + recent session history</span>
+            </div>
+          </aside>
+        </div>
+      </header>
+
+      <main class="main-layout">
+        <section class="panel control-panel">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Mission Console</p>
+              <h3>Configure the maze and pick the strategy</h3>
+            </div>
+            <span id="statusBadge" class="status-badge idle">Ready for a run</span>
+          </div>
+
+          <div class="console-grid">
+            <div class="control-stack">
+              <div class="field-group">
+                <span class="group-label">Algorithms</span>
+                <div class="segmented-control">
+                  <button class="segment-button active" data-algorithm="bfs" type="button">BFS</button>
+                  <button class="segment-button" data-algorithm="dfs" type="button">DFS</button>
+                  <button class="segment-button" data-algorithm="astar" type="button">A*</button>
+                </div>
+              </div>
+
+              <label class="input-group">
+                <span>Run Label</span>
+                <input id="labelInput" type="text" value="Studio Demo Run" />
+              </label>
+
+              <div class="field-group">
+                <span class="group-label">Edit Tools</span>
+                <div class="tool-grid">
+                  <button class="tool-button active" data-tool="wall" type="button">Draw Walls</button>
+                  <button class="tool-button" data-tool="erase" type="button">Erase</button>
+                  <button class="tool-button" data-tool="start" type="button">Place Start</button>
+                  <button class="tool-button" data-tool="goal" type="button">Place Goal</button>
+                </div>
+              </div>
+
+              <div class="button-row">
+                <button id="clearBoardBtn" class="button ghost-button" type="button">Clear Board</button>
+                <button id="randomMazeBtn" class="button secondary-button" type="button">Random Maze</button>
+                <button id="runSearchBtn" class="button primary-button" type="button">Run Search</button>
+              </div>
+            </div>
+
+            <aside class="console-sidebar">
+              <div class="sidebar-card">
+                <p class="card-kicker">Tool Guidance</p>
+                <h4 id="toolTitle">Draw Walls</h4>
+                <p id="toolHint" class="helper-text">
+                  Click and drag across the grid to paint obstacles while keeping
+                  the start and goal open.
+                </p>
+              </div>
+              <div class="sidebar-card compact-card">
+                <p class="card-kicker">Board Telemetry</p>
+                <p id="boardStats" class="helper-text strong-text">12 x 12 grid ready.</p>
+              </div>
+            </aside>
+          </div>
+        </section>
+
+        <section class="panel visual-panel">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Search Theater</p>
+              <h3>Animate every frontier decision</h3>
+            </div>
+            <div class="visual-controls">
+              <button id="prevStepBtn" class="icon-button" type="button" aria-label="Previous step">
+                &#8592;
+              </button>
+              <button id="playPauseBtn" class="button ghost-button compact-button" type="button">
+                Auto Play
+              </button>
+              <button id="nextStepBtn" class="icon-button" type="button" aria-label="Next step">
+                &#8594;
+              </button>
+            </div>
+          </div>
+
+          <div class="progress-shell">
+            <div class="progress-track">
+              <div id="progressFill" class="progress-fill"></div>
+            </div>
+            <span id="progressText">Board ready. Pick an algorithm and launch the search.</span>
+          </div>
+
+          <div class="board-shell">
+            <div class="legend-row">
+              <span class="legend-item"><i class="legend-swatch frontier"></i>Frontier</span>
+              <span class="legend-item"><i class="legend-swatch visited"></i>Visited</span>
+              <span class="legend-item"><i class="legend-swatch path"></i>Final Path</span>
+              <span class="legend-item"><i class="legend-swatch wall"></i>Wall</span>
+              <span class="legend-item"><i class="legend-swatch start"></i>Start</span>
+              <span class="legend-item"><i class="legend-swatch goal"></i>Goal</span>
+            </div>
+            <div id="gridBoard" class="grid-board" aria-live="polite"></div>
+          </div>
+
+          <div class="insight-grid">
+            <article class="insight-card">
+              <p class="metric-label">Algorithm</p>
+              <strong id="algorithmValue">BFS</strong>
+            </article>
+            <article class="insight-card">
+              <p class="metric-label">Visited Nodes</p>
+              <strong id="visitedValue">0</strong>
+            </article>
+            <article class="insight-card">
+              <p class="metric-label">Path Length</p>
+              <strong id="pathValue">--</strong>
+            </article>
+            <article class="insight-card">
+              <p class="metric-label">Step</p>
+              <strong id="stepValue">0 / 0</strong>
+            </article>
+            <article class="insight-card">
+              <p class="metric-label">Heuristic</p>
+              <strong id="heuristicValue">Not used</strong>
+            </article>
+          </div>
+
+          <div class="narration-card glow-card">
+            <p id="messageTitle" class="card-kicker">Narration</p>
+            <h4 id="messageBody">Edit the maze and launch a pathfinding run.</h4>
+            <p id="messageInsight" class="message-insight">
+              The live trace will explain what the active search strategy is doing
+              at every stage.
+            </p>
+          </div>
+        </section>
+
+        <section class="dashboard-grid">
+          <article class="panel challenge-panel">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">Live Challenge</p>
+                <h3 id="challengeTitle">Loading mission...</h3>
+              </div>
+              <span id="challengeMode" class="chip chip-sunrise">solvable</span>
+            </div>
+            <p id="challengePrompt" class="challenge-text">
+              Fetching a backend-generated maze challenge for the studio.
+            </p>
+            <p id="challengeHint" class="challenge-hint">
+              The same challenge maze can be reused for BFS, DFS, and A* so the
+              comparison stays fair.
+            </p>
+            <p id="challengeMeta" class="challenge-meta">12 x 12 grid</p>
+            <div class="button-row tight-row">
+              <button id="loadChallengeBtn" class="button ghost-button" type="button">
+                Preview Another
+              </button>
+              <button id="applyChallengeBtn" class="button secondary-button" type="button">
+                Use This Challenge
+              </button>
+            </div>
+          </article>
+
+          <article class="panel history-panel">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">Recent Runs</p>
+                <h3>Session activity feed</h3>
+              </div>
+            </div>
+            <div id="historyList" class="history-list"></div>
+          </article>
+
+          <article class="panel algorithm-panel">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">Algorithm Core</p>
+                <h3 id="pseudocodeTitle">Breadth-First Search Pseudocode</h3>
+              </div>
+            </div>
+            <pre class="code-block"><code id="pseudocodeCode"></code></pre>
+            <p id="pseudocodeNote" class="code-note"></p>
+          </article>
+
+          <article class="panel concept-panel">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">Demo Talking Points</p>
+                <h3>What to say during your presentation</h3>
+              </div>
+            </div>
+            <ul class="concept-list">
+              <li>BFS guarantees the shortest path on this unweighted grid because it explores layer by layer.</li>
+              <li>DFS prioritizes depth first, so it can find a route quickly but not necessarily the shortest one.</li>
+              <li>A* blends the real cost so far with Manhattan distance to focus the search toward the goal.</li>
+              <li>All three algorithms use only four directions here: right, down, left, and up.</li>
+            </ul>
+          </article>
+        </section>
+      </main>
+    </div>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+    <script src="/app.js"></script>
+  </body>
+</html>
