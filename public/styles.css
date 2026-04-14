@@ -341,18 +341,6 @@ button {
 .trail-demo span:nth-child(5) { animation-delay: 0.8s; }
 .trail-demo span:nth-child(6) { animation-delay: 1s; }
 
-.floating-note {
-  position: absolute;
-  right: -0.5rem;
-  bottom: 1rem;
-  padding: 0.72rem 1rem;
-  border-radius: 999px;
-  background: rgba(8, 17, 34, 0.78);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 16px 24px rgba(0, 0, 0, 0.22);
-  animation: bob 3.8s ease-in-out infinite;
-}
-
 .main-layout {
   display: grid;
   gap: 1.25rem;
@@ -871,16 +859,6 @@ input:focus {
   }
   100% {
     background-position: 200% 50%;
-  }
-}
-
-@keyframes bob {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-6px);
   }
 }
 
